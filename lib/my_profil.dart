@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyProfil extends StatefulWidget {
   const MyProfil({Key? key}) : super(key: key);
@@ -9,6 +12,9 @@ class MyProfil extends StatefulWidget {
 }
 
 class _MyProfilState extends State<MyProfil> {
+  File? imageFile;
+  ImagePicker picker = ImagePicker();
+
   String firstName = "Serge";
   String lastName = "Mounhami";
   int age = 32;
@@ -53,52 +59,84 @@ class _MyProfilState extends State<MyProfil> {
               Container(
                 color: Colors.redAccent,
                 width: size.width,
-                child: Column(children: [
-                  Text(
-                    "$firstName $lastName",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    "Age: $age",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    "Taille: ${height.toInt()}",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    (genre) ? "Genre : Féminin" : "Genre : Masculin",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Hobbies : ",
-                        style: TextStyle(color: Colors.white),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    (imageFile == null)
+                        ? Text("Aucune Image")
+                        : Image.file(
+                            imageFile!,
+                            height: MediaQuery.of(context).size.height / 6,
+                          ),
+                    Column(children: [
+                      Text(
+                        "$firstName $lastName",
+                        style: const TextStyle(color: Colors.white),
                       ),
-                      hobbiesList(),
-                    ],
-                  ),
-                  Text(
-                    "Langage de programmation: $favL",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  ElevatedButton(
+                      Text(
+                        "Age: $age",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        "Taille: ${height.toInt()}",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        (genre) ? "Genre : Féminin" : "Genre : Masculin",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Hobbies : ",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          hobbiesList(),
+                        ],
+                      ),
+                      Text(
+                        "Langage de programmation: $favL",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            showSecret = !showSecret;
+                          });
+                        },
+                        child: const Text(
+                          "Montrer Secret",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(primary: Colors.black),
+                      ),
+                      (showSecret) ? Text(secret) : const Text(""),
+                    ]),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  FloatingActionButton(
                     onPressed: () {
-                      setState(() {
-                        showSecret = !showSecret;
-                      });
+                      pickImage(ImageSource.gallery);
                     },
-                    child: const Text(
-                      "Montrer Secret",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(primary: Colors.black),
+                    child: Icon(Icons.photo_album),
                   ),
-                  (showSecret) ? Text(secret) : const Text("")
-                ]),
+                  FloatingActionButton(
+                    onPressed: () {
+                      pickImage(ImageSource.camera);
+                    },
+                    child: Icon(Icons.camera_enhance),
+                  ),
+                ],
               ),
               const Divider(
                 color: Colors.black,
@@ -258,5 +296,16 @@ class _MyProfilState extends State<MyProfil> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: radios,
     );
+  }
+
+  Future pickImage(ImageSource source) async {
+    PickedFile? chosenImage = await picker.getImage(source: source);
+    setState(() {
+      if (chosenImage == null) {
+        print("Erreur");
+      } else {
+        imageFile = File(chosenImage.path);
+      }
+    });
   }
 }
