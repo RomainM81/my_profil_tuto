@@ -59,61 +59,69 @@ class _MyProfilState extends State<MyProfil> {
               Container(
                 color: Colors.redAccent,
                 width: size.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Column(
                   children: [
-                    (imageFile == null)
-                        ? Text("Aucune Image")
-                        : Image.file(
-                            imageFile!,
-                            height: MediaQuery.of(context).size.height / 6,
+                    Text(
+                      "$firstName $lastName",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        (imageFile == null)
+                            ? Text("Aucune Image")
+                            : Image.file(
+                                imageFile!,
+                                height: MediaQuery.of(context).size.height / 6,
+                              ),
+                        Column(children: [
+                          const SizedBox(
+                            height: 10,
                           ),
-                    Column(children: [
-                      Text(
-                        "$firstName $lastName",
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        "Age: $age",
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        "Taille: ${height.toInt()}",
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        (genre) ? "Genre : Féminin" : "Genre : Masculin",
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Hobbies : ",
-                            style: TextStyle(color: Colors.white),
+                          Text(
+                            "Age: $age",
+                            style: const TextStyle(color: Colors.white),
                           ),
-                          hobbiesList(),
-                        ],
-                      ),
-                      Text(
-                        "Langage de programmation: $favL",
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            showSecret = !showSecret;
-                          });
-                        },
-                        child: const Text(
-                          "Montrer Secret",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        style: ElevatedButton.styleFrom(primary: Colors.black),
-                      ),
-                      (showSecret) ? Text(secret) : const Text(""),
-                    ]),
+                          Text(
+                            "Taille: ${height.toInt()}",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            (genre) ? "Genre : Féminin" : "Genre : Masculin",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Hobbies : ",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              hobbiesList(),
+                            ],
+                          ),
+                          Text(
+                            "Langage de programmation: $favL",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                showSecret = !showSecret;
+                              });
+                            },
+                            child: const Text(
+                              "Montrer Secret",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style:
+                                ElevatedButton.styleFrom(primary: Colors.black),
+                          ),
+                          (showSecret) ? Text(secret) : const Text(""),
+                        ]),
+                      ],
+                    ),
                   ],
                 ),
               ),
